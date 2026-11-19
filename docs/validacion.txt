@@ -1,0 +1,44 @@
+FrioAlerta - Registro de verificacion
+Fecha de referencia: 18 de noviembre de 2026, America/Bogota.
+
+Comando: python -m unittest discover -s tests -v
+Entorno: Python 3.10, Windows.
+Resultado: 14 casos, 13 aprobados, 1 omitido; tiempo 4.959 segundos.
+
+APROBADOS
+- Umbrales inclusivos y clasificacion ALTA/BAJA/NORMAL.
+- Validacion de temperatura, valores no finitos y fechas.
+- Validacion del registro de dispositivos.
+- Rechazo de credencial de sensor invalida.
+- Apertura, continuidad, reconocimiento y resolucion de alertas.
+- Lecturas atrasadas sin retroceso del estado.
+- Idempotencia por UUID de evento.
+- Recuperacion tras commit SQL antes de eliminar de la cola.
+- Fallo SQL conserva el evento pendiente.
+- Cola llena rechaza sin descartar eventos previos.
+- Limite por frecuencia.
+- Ingesta con 12 hilos y 40 eventos persistidos.
+- Parser HTTP y rutas en memoria: frontend, permisos, registro,
+  ingesta, historico, resumen, paginacion y recurso inexistente.
+
+OMITIDO
+- HTTP sobre TCP local: Windows devuelve WinError 10013.
+  La omision esta explicitamente condicionada a este error en la suite.
+
+OTRAS COMPROBACIONES
+- node --check frontend/app.js: exit code 0.
+- python -m compileall -q backend scripts tests: exit code 0.
+
+MICROBENCHMARK DE REFERENCIA
+- Perfil: SQLite + DBM, llamadas directas sin HTTP.
+- 200 eventos, concurrencia 16.
+- Admision: 2.620 segundos; p95: 236.11 ms.
+- Procesamiento secuencial posterior: 16.005 segundos.
+- Persistidos: 200; pendientes al finalizar: 0.
+- No equivale a carga HTTP, prueba distribuida ni medicion de produccion.
+
+PENDIENTES
+- Navegacion y recorrido completo en navegador.
+- Integracion real PostgreSQL/Redis y ejecucion de Compose.
+- Publicacion y comprobacion de repositorio publico GitHub.
+- Sustentacion del estudiante en clase.
