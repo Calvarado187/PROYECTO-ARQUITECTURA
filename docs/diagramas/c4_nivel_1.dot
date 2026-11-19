@@ -1,0 +1,14 @@
+digraph C4_Contexto {
+graph [rankdir=TB,bgcolor="white",pad=.25,nodesep=.6,ranksep=.7,label="C4 NIVEL 1 · CONTEXTO\nFríoAlerta",labelloc=t,fontname="Arial",fontsize=19];
+node [shape=box,style="rounded,filled",fontname="Arial",fontsize=12,margin=".22,.18",color="#447079",fillcolor="#e9f1f2",fontcolor="#19373f"];
+edge [fontname="Arial",fontsize=10,color="#52737b",arrowsize=.7];
+operator [label="Operador y calidad\n[Persona]\nSupervisa cámaras y atiende alertas"];
+sensor [label="Red de sensores\n[Sistema externo]\nMide temperatura y reintenta envíos"];
+system [label="FríoAlerta\n[Sistema de software]\nRecibe lecturas y gestiona\nincidentes térmicos",fillcolor="#146f68",fontcolor=white];
+third [label="Sistema de calidad externo\n[Sistema externo]\nConsulta histórico y alertas"];
+{rank=same;operator;sensor;}
+operator -> system [label="Opera y consulta\nmediante web"];
+sensor -> system [label="Entrega mediciones\nidentificadas y fechadas"];
+third -> system [label="Consulta datos\nmediante API",dir=forward];
+system -> third [style=invis];
+}

@@ -1,0 +1,31 @@
+digraph C4_Componentes {
+graph [rankdir=TB,bgcolor=white,pad=.2,nodesep=.25,ranksep=.3,label="C4 NIVEL 3 · COMPONENTES\nBackend Python",labelloc=t,fontname="Arial",fontsize=18];
+node [shape=box,style="rounded,filled",fontname="Arial",fontsize=10,margin=".16,.13",color="#447079",fillcolor="#e9f1f2",fontcolor="#19373f"];
+edge [fontname="Arial",fontsize=8.5,color="#52737b",arrowsize=.65];
+clients [label="Web, sensores e integraciones\n[Consumidores]"];
+subgraph cluster_backend {
+label="Backend · llamadas Python";fontname="Arial";fontsize=11;style=dashed;color="#91adae";
+http [label="Handler\n[Componente Python]\nRutas y permisos",fillcolor="#146f68",fontcolor=white];
+contexts [label="Registro / Ingesta / Alertas\n[Componente Python]\nCasos de uso por contexto",fillcolor="#d6eeeb"];
+service [label="Service y trabajador\n[Componente Python]\nConsumo y reintento",fillcolor="#d6eeeb"];
+domain [label="Dominio\n[Componente Python]\nReading / thermal_state"];
+repo [label="SQLRepository\n[Componente Python]\nPuerto Repository"];
+queue [label="Adaptadores de cola\n[Componente Python]\nPuerto EventQueue"];
+{rank=same;http;service;}
+http -> service [label="Invoca"];
+service -> contexts [label="Delega casos de uso"];
+contexts -> domain [label="Valida"];
+contexts -> repo [label="Registra / consulta"];
+contexts -> queue [label="Admite evento"];
+service -> repo [label="Procesa transacción"];
+service -> queue [label="Lee / confirma"];
+repo -> domain [label="Clasifica",constraint=false];
+{rank=same;domain;repo;queue;}
+}
+sql [label="PostgreSQL / SQLite\n[Almacén externo]",shape=cylinder];
+events [label="Redis / DBM\n[Almacén externo]",shape=cylinder];
+clients -> http [label="HTTP / JSON"];
+repo -> sql [label="SQL"];
+queue -> events [label="RESP o E/S de archivos"];
+{rank=same;sql;events;}
+}

@@ -1,0 +1,23 @@
+digraph C4_Contenedores {
+graph [rankdir=TB,bgcolor=white,pad=.2,nodesep=.5,ranksep=.65,label="C4 NIVEL 2 · CONTENEDORES\nPerfil PostgreSQL + Redis",labelloc=t,fontname="Arial",fontsize=18,compound=true];
+node [shape=box,style="rounded,filled",fontname="Arial",fontsize=11,margin=".18,.16",color="#447079",fillcolor="#e9f1f2",fontcolor="#19373f"];
+edge [fontname="Arial",fontsize=9,color="#52737b",arrowsize=.7];
+operator [label="Operador\n[Persona]"];
+sensor [label="Sensores / simulador\n[Sistema externo]"];
+third [label="Sistema de terceros\n[Sistema externo]"];
+{rank=same;operator;sensor;third;}
+subgraph cluster_system {
+label="Límite del sistema FríoAlerta";fontname="Arial";fontsize=12;color="#91adae";style=dashed;
+web [label="Panel web\n[Contenedor: HTML / JS / CSS]\nConsulta, registro y atención",fillcolor="#d6eeeb"];
+api [label="Backend y trabajador interno\n[Contenedor: Python]\nAPI, admisión y procesamiento",fillcolor="#146f68",fontcolor=white];
+sql [label="Base relacional\n[Contenedor: PostgreSQL]\nDispositivos, lecturas y alertas",shape=cylinder,fillcolor="#d6eeeb"];
+queue [label="Cola persistente\n[Contenedor: Redis Streams]\nEventos aún no procesados",shape=cylinder,fillcolor="#d6eeeb"];
+web -> api [label="Consulta y opera\nHTTP / JSON"];
+api -> sql [label="Lee y confirma transacciones\nSQL / TCP"];
+api -> queue [label="Encola, lee y elimina\nRESP / TCP"];
+{rank=same;sql;queue;}
+}
+operator -> web [label="Utiliza\nNavegador"];
+sensor -> api [label="Envía lecturas\nHTTP / JSON"];
+third -> api [label="Consulta con token\nHTTP / JSON"];
+}
