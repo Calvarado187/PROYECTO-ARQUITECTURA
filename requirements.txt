@@ -1,0 +1,2 @@
+# Solo necesario para el perfil PostgreSQL. El perfil local usa Python estándar.
+psycopg[binary]>=3.2,<4
